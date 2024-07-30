@@ -1,20 +1,17 @@
-'use client'
-import { Calendar } from "@/components/ui/calendar"
-import {useState} from "react";
+import CalenderSection from "@/app/CalenderSection";
+import { isSignedIn } from "@/lib/cookies";
+import { redirect } from "next/navigation";
+import { logout } from "@/app/actions";
 
-export default function Home() {
-  const [date, setDate] = useState<Date | undefined>(new Date())
+export default async function Home() {
+  if (!isSignedIn()) redirect("/login");
 
   return (
-    <main className="">
-         <Calendar
-            mode="single"
-            selected={date}
-            onSelect={setDate}
-            className="rounded-md border"
-          />
-        {date?.toLocaleDateString()}
-    </main>
-
+    <>
+      <form action={logout}>
+        <button>Logout</button>
+      </form>
+      <CalenderSection />
+    </>
   );
 }

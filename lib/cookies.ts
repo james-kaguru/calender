@@ -9,3 +9,9 @@ export function setCookie(name: string, value: string) {
 export function getCookie(name: string) {
   return cookies().get(name);
 }
+
+export function isSignedIn() {
+  const accessToken = getCookie("accessToken");
+  if (!accessToken) return false;
+  return true;
+}
