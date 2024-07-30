@@ -10,11 +10,11 @@ export default async function Home() {
   const { data } = await calenderApi.get("/meetings");
 
   return (
-    <>
+    <div>
       <form action={logout}>
         <button>Logout</button>
       </form>
       <CalenderSection meetings={data} />
-    </>
+    </div>
   );
 }

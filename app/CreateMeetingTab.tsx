@@ -1,0 +1,139 @@
+"use client";
+
+import { formSchema, FormSchema } from "@/app/schema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Dispatch, SetStateAction } from "react";
+
+export default function CreateMeetingTab(props: {
+  setTab: Dispatch<SetStateAction<string>>;
+}) {
+  const form = useForm<FormSchema>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      from: "",
+      to: "",
+    },
+  });
+
+  function onSubmit(data: FormSchema) {
+    const from = parseInt(data.from.slice(0, 2));
+    const to = parseInt(data.to.slice(0, 2));
+    const fromMinutes = parseInt(data.from.slice(-2));
+    const toMinutes = parseInt(data.to.slice(-2));
+
+    console.log({ from, to, fromMinutes, toMinutes });
+    if (from > to) {
+      form.setError("to", {
+        message: "Meeting cannot end earlier than start time.",
+      });
+      return;
+    }
+
+    if (from === to && fromMinutes === toMinutes) {
+      form.setError("to", {
+        message: "Meeting cannot start and end at the same time.",
+      });
+      return;
+    }
+
+    if (from === to && fromMinutes > toMinutes) {
+      form.setError("to", {
+        message: "Meeting cannot end earlier than start time.",
+      });
+      return;
+    }
+  }
+
+  return (
+    <div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Title</FormLabel>
+                <FormControl>
+                  <Input placeholder="Board Meeting" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="All hands in meeting"
+                    className="resize-none"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="from"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Start time</FormLabel>
+                <FormControl>
+                  <Input {...field} type={"time"} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="to"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>End time</FormLabel>
+                <FormControl>
+                  <Input {...field} type={"time"} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className={"flex flex-row items-center justify-between"}>
+            <Button
+              type="button"
+              variant={"outline"}
+              onClick={() => props.setTab("meetings")}
+            >
+              Cancel
+            </Button>
+            <Button type="submit">Submit</Button>
+          </div>
+        </form>
+      </Form>
+    </div>
+  );
+}
