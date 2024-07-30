@@ -2,7 +2,7 @@ import axios from "axios";
 import { getCookie } from "@/lib/cookies";
 
 const calenderApi = axios.create({
-  baseURL: process.env.BACKEND_URL,
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
@@ -10,7 +10,7 @@ const calenderApi = axios.create({
 });
 
 calenderApi.interceptors.request.use(async (config) => {
-  const accessToken = await getCookie("accessToken");
+  const accessToken = getCookie("accessToken");
 
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;
@@ -18,3 +18,5 @@ calenderApi.interceptors.request.use(async (config) => {
 
   return config;
 });
+
+export default calenderApi;

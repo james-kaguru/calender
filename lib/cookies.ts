@@ -7,7 +7,7 @@ export function setCookie(name: string, value: string) {
 }
 
 export function getCookie(name: string) {
-  return cookies().get(name);
+  return cookies().get(name)?.value;
 }
 
 export function isSignedIn() {
