@@ -13,7 +13,7 @@ export default function Home() {
             onSelect={setDate}
             className="rounded-md border"
           />
-      {date?.toLocaleDateString()}
+        {date?.toLocaleDateString()}
     </main>
 
   );
