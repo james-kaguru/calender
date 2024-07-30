@@ -1,14 +1,26 @@
 "use client";
 import { Calendar } from "@/components/ui/calendar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import CreateMeetingTab from "@/app/CreateMeetingTab";
 import { DateTime } from "luxon";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import queryString from "query-string";
 
 export default function CalenderSection(props: { meetings: Meeting[] }) {
+  const router = useRouter();
+
   const [tab, setTab] = useState("meetings");
   const [date, setDate] = useState<Date | undefined>(new Date());
+
+  useEffect(() => {
+    if (date) {
+      const isoDate = DateTime.fromJSDate(date);
+
+      router.replace(`/?${queryString.stringify({ date: isoDate })}`);
+    }
+  }, [date]);
 
   return (
     <main className="container mx-auto flex flex-row gap-3">
@@ -43,15 +55,19 @@ export default function CalenderSection(props: { meetings: Meeting[] }) {
                 <div className={"flex flex-row justify-between"}>
                   <p suppressHydrationWarning>
                     <b>Start time: </b>
-                    {DateTime.fromISO(meeting.from).toLocaleString(
-                      DateTime.DATETIME_SHORT,
-                    )}
+                    {DateTime.fromISO(meeting.from).toLocaleString({
+                      hour12: true,
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
                   </p>
                   <p suppressHydrationWarning>
                     <b>End time: </b>
-                    {DateTime.fromISO(meeting.to).toLocaleString(
-                      DateTime.DATETIME_SHORT,
-                    )}
+                    {DateTime.fromISO(meeting.to).toLocaleString({
+                      hour12: true,
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
                   </p>
                 </div>
               </div>

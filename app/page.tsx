@@ -10,11 +10,17 @@ export default async function Home({ searchParams }: any) {
   if (!isSignedIn()) redirect("/login");
   const now = DateTime.now();
 
-  const date = DateTime.fromObject({
-    year: now.year,
-    month: now.month,
-    day: now.day,
-  }).toISO();
+  let date = "";
+
+  if (searchParams.date === undefined) {
+    date = DateTime.fromObject({
+      year: now.year,
+      month: now.month,
+      day: now.day,
+    }).toISO() as string;
+  } else {
+    date = searchParams.date;
+  }
 
   const { data } = await calenderApi.get(
     `/meetings?${queryString.stringify({ date })}`,
