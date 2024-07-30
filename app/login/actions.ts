@@ -1,14 +1,15 @@
 "use server";
 
 import { FormSchema } from "@/app/login/schema";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { setCookie } from "@/lib/cookies";
+import calenderApi from "@/lib/axios";
 
 export async function login(data: FormSchema) {
   let message = "";
 
   try {
-    const res = await axios.post(process.env.BACKEND_API + "/auth/login", data);
+    const res = await calenderApi.post("/auth/login", data);
 
     setCookie("accessToken", res.data.accessToken);
 

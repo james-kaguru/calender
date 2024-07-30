@@ -31,6 +31,7 @@ export default function Page() {
 
   async function onSubmit(data: FormSchema) {
     const { message } = await login(data);
+    console.log(message);
     if (message == "success") {
       router.replace("/");
     } else {
@@ -69,7 +70,7 @@ export default function Page() {
               </FormItem>
             )}
           />
-          {message !== undefined ? (
+          {message !== "" ? (
             <p className={"text-sm font-medium text-destructive"}>{message}</p>
           ) : null}
 
