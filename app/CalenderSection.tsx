@@ -34,7 +34,7 @@ export default function CalenderSection(props: { meetings: Meeting[] }) {
             ))}
           </TabsContent>
           <TabsContent value="create-meeting">
-            <CreateMeetingTab setTab={setTab} />
+            <CreateMeetingTab setTab={setTab} date={date} />
           </TabsContent>
         </Tabs>
       </div>

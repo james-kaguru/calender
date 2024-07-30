@@ -15,9 +15,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dispatch, SetStateAction } from "react";
+import { createMeeting } from "@/app/actions";
+import { toast } from "sonner";
 
 export default function CreateMeetingTab(props: {
   setTab: Dispatch<SetStateAction<string>>;
+  date: Date;
 }) {
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -29,13 +32,12 @@ export default function CreateMeetingTab(props: {
     },
   });
 
-  function onSubmit(data: FormSchema) {
+  async function onSubmit(data: FormSchema) {
     const from = parseInt(data.from.slice(0, 2));
     const to = parseInt(data.to.slice(0, 2));
     const fromMinutes = parseInt(data.from.slice(-2));
     const toMinutes = parseInt(data.to.slice(-2));
 
-    console.log({ from, to, fromMinutes, toMinutes });
     if (from > to) {
       form.setError("to", {
         message: "Meeting cannot end earlier than start time.",
@@ -56,10 +58,22 @@ export default function CreateMeetingTab(props: {
       });
       return;
     }
+
+    const { message } = await createMeeting(data, props.date);
+
+    if (message === "success") {
+      toast.success("Created meeting successfully");
+      props.setTab("meetings");
+    } else {
+      form.setError("from", {
+        message,
+      });
+    }
   }
 
   return (
     <div>
+      {props.date.toDateString()}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
           <FormField
