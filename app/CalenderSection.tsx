@@ -22,8 +22,8 @@ export default function CalenderSection(props: { meetings: Meeting[] }) {
   }, [date]);
 
   return (
-    <main className="container mx-auto flex flex-row gap-3">
-      <div className={"w-4/12"}>
+    <main className="mx-auto flex flex-row gap-3">
+      <div className={"w-fit"}>
         <Calendar
           mode="single"
           selected={date}
@@ -31,16 +31,21 @@ export default function CalenderSection(props: { meetings: Meeting[] }) {
           className="rounded-md border"
         />
       </div>
-      <div className={"w-8/12"}>
+      <div className={"w-full"}>
         <div className={"flex flex-row justify-end mb-3"}>
           <Link href={"/meetings/create"}>
             <Button>Create meeting</Button>
           </Link>
         </div>
-
         {props.meetings.map((meeting) => (
           <Meeting meeting={meeting} key={meeting.id} />
         ))}
+
+        {props.meetings.length === 0 ? (
+          <div className={"p-3 rounded border font-bold text-sm"}>
+            No meetings scheduled
+          </div>
+        ) : null}
       </div>
     </main>
   );
