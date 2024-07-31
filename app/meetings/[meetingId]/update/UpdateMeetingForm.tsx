@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Meeting from "@/app/Meeting";
+import Meeting from "@/components/Meeting";
 import { useForm } from "react-hook-form";
 import { formSchema, FormSchema } from "@/app/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -166,7 +166,7 @@ export default function UpdateMeetingForm(props: {
             Meeting collides with the following meetings
           </p>
           {meetings.map((meeting) => (
-            <Meeting key={meeting.id} meeting={meeting} />
+            <Meeting key={meeting.id} meeting={meeting} showDelete={false} />
           ))}
         </>
       ) : null}

@@ -10,7 +10,10 @@ import { deleteMeeting } from "@/app/actions";
 import { EllipsisVertical } from "lucide-react";
 import Link from "next/link";
 
-export default function Meeting(props: { meeting: Meeting }) {
+export default function Meeting(props: {
+  meeting: Meeting;
+  showDelete: boolean;
+}) {
   const router = useRouter();
   const meeting = props.meeting;
 
@@ -35,20 +38,22 @@ export default function Meeting(props: { meeting: Meeting }) {
             </PopoverTrigger>
             <PopoverContent
               align={"end"}
-              className={"flex flex-col p-0 text-sm"}
+              className={"flex flex-col p-0 text-sm w-[200px]"}
             >
               <Link
-                className={"p-3 hover:bg-accent text-left"}
+                className={"p-2 hover:bg-accent text-left"}
                 href={`/meetings/${meeting.id}/update`}
               >
                 Edit
               </Link>
-              <button
-                className={"p-3 hover:bg-accent text-left"}
-                onClick={handleDelete}
-              >
-                Delete
-              </button>
+              {props.showDelete ? (
+                <button
+                  className={"p-2 hover:bg-accent text-left"}
+                  onClick={handleDelete}
+                >
+                  Delete
+                </button>
+              ) : null}
             </PopoverContent>
           </Popover>
         </p>

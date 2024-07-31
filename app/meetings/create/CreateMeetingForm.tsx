@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { toast } from "sonner";
-import Meeting from "@/app/Meeting";
+import Meeting from "@/components/Meeting";
 import { useRouter } from "next/navigation";
 import { createMeeting } from "@/app/actions";
 
@@ -164,7 +164,7 @@ export default function CreateMeetingForm(props: { date: Date }) {
             Meeting collides with the following meetings
           </p>
           {meetings.map((meeting) => (
-            <Meeting key={meeting.id} meeting={meeting} />
+            <Meeting key={meeting.id} meeting={meeting} showDelete={false} />
           ))}
         </>
       ) : null}

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import { useRouter } from "next/navigation";
 import queryString from "query-string";
-import Meeting from "@/app/Meeting";
+import Meeting from "@/components/Meeting";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -38,7 +38,7 @@ export default function CalenderSection(props: { meetings: Meeting[] }) {
           </Link>
         </div>
         {props.meetings.map((meeting) => (
-          <Meeting meeting={meeting} key={meeting.id} />
+          <Meeting meeting={meeting} key={meeting.id} showDelete={true} />
         ))}
 
         {props.meetings.length === 0 ? (
