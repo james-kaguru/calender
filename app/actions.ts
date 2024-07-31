@@ -60,3 +60,19 @@ export async function createMeeting({
 
   return { message, meetings };
 }
+
+export async function deleteMeeting(id: number) {
+  let message = "";
+
+  try {
+    await calenderApi.delete(`/meetings/${id}`);
+
+    message = "success";
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      message = e.response?.data.message;
+    }
+  }
+
+  return { message };
+}

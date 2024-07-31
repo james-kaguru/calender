@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
-import Meeting from "@/components/Meeting";
+import Meeting from "@/app/Meeting";
 import { useRouter } from "next/navigation";
 import { createMeeting } from "@/app/actions";
 

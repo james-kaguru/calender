@@ -7,7 +7,7 @@ import { DateTime } from "luxon";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import queryString from "query-string";
-import Meeting from "@/components/Meeting";
+import Meeting from "@/app/Meeting";
 
 export default function CalenderSection(props: { meetings: Meeting[] }) {
   const router = useRouter();
