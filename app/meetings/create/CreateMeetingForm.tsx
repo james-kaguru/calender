@@ -80,7 +80,9 @@ export default function CreateMeetingForm(props: { date: Date }) {
 
   return (
     <div>
-      {props.date.toDateString()}
+      <p className={"w-fit mx-auto"}>
+        Scheduling a meeting for :<b>{props.date.toDateString()}</b>
+      </p>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
           <FormField

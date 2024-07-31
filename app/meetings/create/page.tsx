@@ -8,8 +8,8 @@ export default function Page() {
   const [date, setDate] = useState<Date | undefined>(new Date());
 
   return (
-    <div className={"container mx-auto flex flex-row"}>
-      <div className={"w-4/12"}>
+    <div className={"container mx-auto flex flex-row gap-3 pt-3"}>
+      <div className={"w-fit"}>
         <Calendar
           mode="single"
           selected={date}
@@ -17,8 +17,12 @@ export default function Page() {
           className="rounded-md border"
         />
       </div>
-      <div className={"w-4/12"}>
-        <CreateMeetingForm date={date} />
+      <div className={"w-full"}>
+        {date !== undefined ? (
+          <CreateMeetingForm date={date} />
+        ) : (
+          <p className={"rounded border text-sm font-bold"}>Select date</p>
+        )}
       </div>
     </div>
   );
