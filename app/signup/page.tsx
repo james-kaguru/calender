@@ -11,27 +11,28 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { formSchema, FormSchema } from "@/app/login/schema";
-import { login } from "@/app/login/actions";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { signUpSchema, SignUpSchema } from "@/app/signup/schema";
+import { signup } from "@/app/signup/actions";
 
 export default function Page() {
   const [message, setMessage] = useState("");
   const router = useRouter();
 
-  const form = useForm<FormSchema>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<SignUpSchema>({
+    resolver: zodResolver(signUpSchema),
 
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
   });
 
-  async function onSubmit(data: FormSchema) {
-    const { message } = await login(data);
+  async function onSubmit(data: SignUpSchema) {
+    const { message } = await signup(data);
 
     if (message == "success") {
       router.replace("/");
@@ -42,9 +43,23 @@ export default function Page() {
 
   return (
     <div className={"w-[500px] mx-auto rounded p-3 border my-3"}>
-      <p className={"font-bold text-center"}>Login</p>
+      <p className={"font-bold text-center"}>Signup</p>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name="email"
@@ -77,14 +92,14 @@ export default function Page() {
           ) : null}
 
           <Button type="submit" className={"w-full"}>
-            Login
+            Create
           </Button>
         </form>
       </Form>
 
       <div className={"w-full flex flex-row justify-center mt-2"}>
-        <Link href={"/signup"} className={"underline text-sm p-3 mx-auto"}>
-          Signup
+        <Link href={"/login"} className={"underline text-sm p-3 mx-auto"}>
+          Login
         </Link>
       </div>
     </div>
