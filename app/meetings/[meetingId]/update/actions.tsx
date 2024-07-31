@@ -4,6 +4,7 @@ import { FormSchema } from "@/app/schema";
 import { DateTime } from "luxon";
 import calenderApi from "@/lib/axios";
 import { AxiosError } from "axios";
+import { revalidatePath } from "next/cache";
 
 export async function updateMeeting(
   data: FormSchema,
@@ -39,6 +40,7 @@ export async function updateMeeting(
 
     message = "success";
     meetings = [];
+    revalidatePath("/");
     console.log("success");
   } catch (e) {
     if (e instanceof AxiosError) {

@@ -14,16 +14,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import Meeting from "@/app/Meeting";
 import { useRouter } from "next/navigation";
 import { createMeeting } from "@/app/actions";
 
-export default function CreateMeetingForm(props: {
-  setTab: Dispatch<SetStateAction<string>>;
-  date: Date;
-}) {
+export default function CreateMeetingForm(props: { date: Date }) {
   const router = useRouter();
   const [meetings, setMeetings] = useState<Meeting[]>([]);
 
@@ -73,8 +70,7 @@ export default function CreateMeetingForm(props: {
 
     if (message === "success") {
       toast.success("Created meeting successfully");
-      router.refresh();
-      props.setTab("meetings");
+      router.replace("/");
     } else {
       form.setError("from", {
         message,
@@ -151,7 +147,7 @@ export default function CreateMeetingForm(props: {
             <Button
               type="button"
               variant={"outline"}
-              onClick={() => props.setTab("meetings")}
+              onClick={() => router.replace("/")}
             >
               Cancel
             </Button>
