@@ -16,6 +16,7 @@ export default function Meeting(props: { meeting: Meeting }) {
     const { message } = await deleteMeeting(meeting.id);
     if (message === "success") {
       router.refresh();
+      toast("Deleted Meeting");
     } else {
       toast(message);
     }
