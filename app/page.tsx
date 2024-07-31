@@ -5,6 +5,7 @@ import calenderApi from "@/lib/axios";
 import { DateTime } from "luxon";
 import queryString from "query-string";
 import CalenderSection from "@/app/CalenderSection";
+import { Button } from "@/components/ui/button";
 
 export default async function Home({ searchParams }: any) {
   if (!isSignedIn()) redirect("/login");
@@ -27,10 +28,13 @@ export default async function Home({ searchParams }: any) {
   );
 
   return (
-    <div>
-      <form action={logout}>
-        <button>Logout</button>
-      </form>
+    <div className={"container mx-auto"}>
+      <nav className={"flex flex-row justify-end border-b p-2 mb-3"}>
+        <form action={logout}>
+          <Button className={"w-fit"}>Logout</Button>
+        </form>
+      </nav>
+
       <CalenderSection meetings={data} />
     </div>
   );
