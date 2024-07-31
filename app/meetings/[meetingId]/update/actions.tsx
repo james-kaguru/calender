@@ -1,24 +1,15 @@
 "use server";
 
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { FormSchema } from "@/app/schema";
 import { DateTime } from "luxon";
-import { AxiosError } from "axios";
 import calenderApi from "@/lib/axios";
+import { AxiosError } from "axios";
 
-export async function logout() {
-  cookies().set("accessToken", "", { expires: 1 });
-  redirect("/login");
-}
-
-export async function createMeeting({
-  data,
-  jsDate,
-}: {
-  data: FormSchema;
-  jsDate: Date;
-}) {
+export async function updateMeeting(
+  data: FormSchema,
+  jsDate: Date,
+  meetingId: number,
+) {
   const selectedDate = DateTime.fromJSDate(jsDate);
 
   const from = DateTime.fromObject({
@@ -39,7 +30,7 @@ export async function createMeeting({
   let meetings: Meeting[] = [];
 
   try {
-    await calenderApi.post("/meetings", {
+    await calenderApi.patch(`/meetings/${meetingId}`, {
       title: data.title,
       description: data.description,
       from,
@@ -58,20 +49,4 @@ export async function createMeeting({
   }
 
   return { message, meetings };
-}
-
-export async function deleteMeeting(id: number) {
-  let message = "";
-
-  try {
-    await calenderApi.delete(`/meetings/${id}`);
-
-    message = "success";
-  } catch (e) {
-    if (e instanceof AxiosError) {
-      message = e.response?.data.message;
-    }
-  }
-
-  return { message };
 }

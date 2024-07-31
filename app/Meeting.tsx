@@ -7,6 +7,8 @@ import { DateTime } from "luxon";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { deleteMeeting } from "@/app/actions";
+import { EllipsisVertical } from "lucide-react";
+import Link from "next/link";
 
 export default function Meeting(props: { meeting: Meeting }) {
   const router = useRouter();
@@ -16,9 +18,9 @@ export default function Meeting(props: { meeting: Meeting }) {
     const { message } = await deleteMeeting(meeting.id);
     if (message === "success") {
       router.refresh();
-      toast("Deleted Meeting");
+      toast.success("Deleted Meeting");
     } else {
-      toast(message);
+      toast.error(message);
     }
   }
 
@@ -28,12 +30,19 @@ export default function Meeting(props: { meeting: Meeting }) {
         <p className={"font-bold text-base"}>{meeting.title}</p>
         <p>
           <Popover>
-            <PopoverTrigger>Open</PopoverTrigger>
+            <PopoverTrigger>
+              <EllipsisVertical size={20} />
+            </PopoverTrigger>
             <PopoverContent
               align={"end"}
               className={"flex flex-col p-0 text-sm"}
             >
-              <button className={"p-3 hover:bg-accent text-left"}>Edit</button>
+              <Link
+                className={"p-3 hover:bg-accent text-left"}
+                href={`/meetings/${meeting.id}/update`}
+              >
+                Edit
+              </Link>
               <button
                 className={"p-3 hover:bg-accent text-left"}
                 onClick={handleDelete}
