@@ -14,14 +14,19 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Dispatch, SetStateAction } from "react";
-import { createMeeting } from "@/app/actions";
+import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
+import Meeting from "@/components/Meeting";
+import { useRouter } from "next/navigation";
+import { createMeeting } from "@/app/actions";
 
-export default function CreateMeetingTab(props: {
+export default function CreateMeetingForm(props: {
   setTab: Dispatch<SetStateAction<string>>;
   date: Date;
 }) {
+  const router = useRouter();
+  const [meetings, setMeetings] = useState<Meeting[]>([]);
+
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -59,10 +64,16 @@ export default function CreateMeetingTab(props: {
       return;
     }
 
-    const { message } = await createMeeting(data, props.date);
+    const { message, meetings } = await createMeeting({
+      data,
+      jsDate: props.date,
+    });
+
+    setMeetings(meetings);
 
     if (message === "success") {
       toast.success("Created meeting successfully");
+      router.refresh();
       props.setTab("meetings");
     } else {
       form.setError("from", {
@@ -148,6 +159,17 @@ export default function CreateMeetingTab(props: {
           </div>
         </form>
       </Form>
+
+      {meetings.length > 0 ? (
+        <>
+          <p className={"text-sm p-3 my-3"}>
+            Meeting collides with the following meetings
+          </p>
+          {meetings.map((meeting) => (
+            <Meeting key={meeting.id} meeting={meeting} />
+          ))}
+        </>
+      ) : null}
     </div>
   );
 }

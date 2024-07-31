@@ -3,17 +3,23 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { FormSchema } from "@/app/schema";
-import calenderApi from "@/lib/axios";
 import { DateTime } from "luxon";
 import { AxiosError } from "axios";
-import { revalidatePath } from "next/cache";
+import calenderApi from "@/lib/axios";
 
 export async function logout() {
   cookies().set("accessToken", "", { expires: 1 });
   redirect("/login");
 }
 
-export async function createMeeting(data: FormSchema, jsDate: Date) {
+export async function createMeeting({
+  data,
+  jsDate,
+}: {
+  data: FormSchema;
+  jsDate: Date;
+}) {
+  console.log("createMeeting");
   const selectedDate = DateTime.fromJSDate(jsDate);
 
   const from = DateTime.fromObject({
@@ -31,9 +37,10 @@ export async function createMeeting(data: FormSchema, jsDate: Date) {
   });
 
   let message = "";
+  let meetings: Meeting[] = [];
 
   try {
-    const res = await calenderApi.post("/meetings", {
+    await calenderApi.post("/meetings", {
       title: data.title,
       description: data.description,
       from,
@@ -41,12 +48,15 @@ export async function createMeeting(data: FormSchema, jsDate: Date) {
     });
 
     message = "success";
-    revalidatePath("/");
+    meetings = [];
+    console.log("success");
   } catch (e) {
     if (e instanceof AxiosError) {
+      meetings = [...e.response?.data.meetings];
       message = e.response?.data.message;
     }
+    console.log("error");
   }
 
-  return { message };
+  return { message, meetings };
 }
